@@ -4,12 +4,14 @@ export default function AskMe() {
     const router = useRouter();
     const { accountID } = router.query;
 
+    const question = 'กระต่ายกับเต่าอะไรเกิดก่อนกัน';
+
     return (
         <div className="bg-slate-800 w-screen h-screen font-Prompt text-4xl flex justify-center">
             <div className="my-auto w-full">
                 <div className="bg-slate-500 w-10/12 pb-10 overflow-clip rounded-3xl mx-auto text-center text-2xl shadow-2xl shadow-slate-700 lg:w-1/3">
                     <p className="bg-text py-2 text-black font-extrabold">@{accountID}</p>
-                    <p className="w-10/12 mx-auto mt-4">{'กระต่ายกับเต่าอะไรเกิดก่อนกัน'}</p>
+                    <p className="w-10/12 mx-auto mt-4">{question}</p>
                     <div className="mt-4 w-3/4 bg-white bg-opacity-60 mx-auto p-1 rounded-full">
                         <input className="px-2 w-full bg-transparent text-black focus:outline-none"></input>
                     </div>

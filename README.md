@@ -21,9 +21,8 @@ Anonymously ask question, send songs / images / drawing to specific instagram ac
 
 ### Database
 
-- 2 choices??
-  - SQL
-  - No SQL
+- mongodb
+- prisma
 
 ### Hosting
 
@@ -43,6 +42,20 @@ Install required package
 
 ```sh
 npm install
+```
+
+- mongodb
+
+```sh
+use test
+db.createUser(
+  {
+    user: "myTester",
+    pwd:  passwordPrompt(),   // or cleartext password
+    roles: [ { role: "readWrite", db: "test" },
+             { role: "read", db: "reporting" } ]
+  }
+)
 ```
 
 ### Installation

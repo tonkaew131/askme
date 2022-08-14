@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "db": "\"./mongodb/bin/mongod.exe\" --dbpath=./mongodb/database",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.9.1",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
