@@ -7,10 +7,13 @@
     "db": "\"./mongodb/bin/mongod.exe\" --dbpath=./mongodb/database",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:pull": "npx prisma db pull",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.9.1",
+    "@prisma/client": "^4.2.1",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -20,6 +23,7 @@
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
     "postcss": "^8.4.16",
+    "prisma": "^4.2.1",
     "tailwindcss": "^3.1.8"
   }
 }
