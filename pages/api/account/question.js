@@ -52,7 +52,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     // Add new question
     if (req.method == 'POST') {
         const { title } = req.query;
-        if(title == undefined) {
+        if (title == undefined) {
             return res.status(400).json({
                 error: {
                     code: 400,
@@ -60,7 +60,6 @@ export default withApiAuthRequired(async function handler(req, res) {
                 }
             });
         }
-
 
         await prisma.question.create({
             data: {
