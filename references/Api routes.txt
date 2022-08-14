@@ -1,18 +1,25 @@
 Api routes
 ---------------------------------- Anyone ----------------------------------
 
-GET /api/question/{accountID}               Anyone can access, get primary question
-GET /api/question/{accountID}/{questionID}  Anyone can access, get primary question
+GET /api/question/{accountID}              : get primary question
+GET /api/question/{accountID}/{questionID} : get specific question
 
-POST /api/question/{accountID}              Anyone can access, upload answer
-POST /api/question/{accountID}/{questionID} Anyone can access, upload answer
+POST /api/question/{accountID}              : upload answer to primary question
+POST /api/question/{accountID}/{questionID} : upload answer to specific question
 
-GET /api/auth/login     Anyone can access
-GET /api/auth/logout    Anyone can access
+GET /api/auth/login  : login
+GET /api/auth/logout : logout
 
 ---------------------------- Account Owner Only ----------------------------
 
-GET /api/account/question  Account Owner can access, get list of their question
-POST /api/account/question Account Owner can access, update list of their question
+GET /api/account  : get profile information
+POST /api/account : update profile information
 
-GET /api/account/question/{questionID} Account Owner can access, get list of answers of questionID question
+GET /api/account/question  : get list of their question
+POST /api/account/question : update list of their question
+
+GET /api/account/question/{questionID} : get list of answers of questionID question
+
+-------------------------------- Admin Only --------------------------------
+
+POST /api/admin/account : create new user

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "db": "\"./mongodb/bin/mongod.exe\" --dbpath=./mongodb/database",
+    "db": "\"./mongodb/bin/mongod.exe\" --dbpath=./mongodb/database --replSet=rs0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
