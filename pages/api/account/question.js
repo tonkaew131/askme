@@ -61,12 +61,24 @@ export default withApiAuthRequired(async function handler(req, res) {
             });
         }
 
-        await prisma.question.create({
+        const isPrimary = req.query.isPrimary == 'true' ? true : false;
+        const question = await prisma.question.create({
             data: {
                 userId: userDB.id,
                 title: title
             }
         })
+
+        // Set user's primary question
+        if (isPrimary) {
+            await prisma.user.update({
+                where: {
+                    id: userDB.id
+                }, data: {
+                    primaryQuestionId: question.id
+                }
+            })
+        }
 
         await prisma.$disconnect();
         return res.status(200).json({
