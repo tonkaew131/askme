@@ -22,6 +22,7 @@ export default withApiAuthRequired(async function handler(req, res) {
 
         // User's not whitelist
         if (userDB == null) {
+            prisma.$disconnect();
             return res.status(404).json({
                 error: {
                     code: 404,
@@ -41,7 +42,7 @@ export default withApiAuthRequired(async function handler(req, res) {
 
     // Get list of User's questions
     if (req.method == 'GET') {
-        await prisma.$disconnect();
+        prisma.$disconnect(); // No need to wait
         return res.status(200).json({
             data: {
                 questions: userDB.questions
@@ -53,6 +54,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     if (req.method == 'POST') {
         const { title } = req.query;
         if (title == undefined) {
+            prisma.$disconnect(); // No need to wait
             return res.status(400).json({
                 error: {
                     code: 400,
@@ -80,10 +82,10 @@ export default withApiAuthRequired(async function handler(req, res) {
             })
         }
 
-        await prisma.$disconnect();
+        prisma.$disconnect(); // No need to await
         return res.status(200).json({
             data: {
-                message: 'Successfully'
+                message: 'Resource updated successfully'
             }
         });
     }
