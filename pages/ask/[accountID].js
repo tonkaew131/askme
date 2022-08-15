@@ -1,10 +1,28 @@
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 
 export default function AskMe() {
     const router = useRouter();
     const { accountID } = router.query;
 
-    const question = 'กระต่ายกับเต่าอะไรเกิดก่อนกัน';
+    const [question, setQuestion] = useState('');
+
+    useEffect(() => {
+        if (!accountID) return;
+
+        const fetchData = async () => {
+            var data = await fetch(`/api/question/${accountID}`);
+            var json = await data.json();
+
+            if (data.status == 200) {
+                return setQuestion(json.data.title);
+            }
+
+            console.log(json); // For Error
+        };
+
+        fetchData().catch(error => console.error(error));
+    }, [accountID]);
 
     return (
         <div className="bg-slate-800 w-screen h-screen font-Prompt text-4xl flex justify-center">
