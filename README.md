@@ -45,7 +45,11 @@ npm install
   - Download mongdb community server
   - Extact its folder into project and rename the folder to `mongodb`
   - Create folder `database` inside `mongodb` folder
+  
+- mongodb: Running server
+
   - Running mongodb using `npm run db`
+  - Migrate prisma to mongodb using `npx prisma db push`
  
 - mongodb: Setting up user & password (optional), and create replica set
 
