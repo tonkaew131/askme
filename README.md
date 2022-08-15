@@ -40,7 +40,13 @@ Anonymously ask question, send songs / images / drawing to specific instagram ac
 npm install
 ```
 
-- mongodb: Setting up password, and replica set
+- mongodb: Install development database server
+
+  - Download mongdb community server
+  - Extact its folder into project and rename the folder to `mongodb`
+  - Create folder `database` inside `mongodb` folder
+ 
+- mongodb: Setting up user & password (optional), and create replica set
 
 ```sh
 use test
@@ -58,7 +64,7 @@ db.createUser(
 rs.initiate( {    _id : "rs0", members: [ { _id: 0, host: "localhost:27017" } ] })
 ```
 
-- [auth0](https://auth0.com/docs/quickstart/webapp/nextjs/01-login): Setting ClientId, ClientSecret, Domain
+- [auth0](https://auth0.com/docs/quickstart/webapp/nextjs/01-login): Setting ClientId, ClientSecret, Domain into `.env.local`
 
 ### Installation
 
