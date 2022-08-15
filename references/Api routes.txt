@@ -1,8 +1,8 @@
 Api routes
 ---------------------------------- Anyone ----------------------------------
 
-GET /api/question/{accountID}              : get primary question
-GET /api/question/{accountID}/{questionID} : get specific question
+✅ GET /api/question/{accountID}              : get primary question
+GET /api/question/{accountID}/{questionID} : get specific question,
 
 POST /api/question/{accountID}              : upload answer to primary question
 POST /api/question/{accountID}/{questionID} : upload answer to specific question

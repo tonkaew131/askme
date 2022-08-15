@@ -3,12 +3,12 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-    const { accountID } = req.query;
+    const { accountId } = req.query;
 
     await prisma.$connect();
     const user = await prisma.user.findFirst({
         where: {
-            instagramId: accountID
+            instagramId: accountId
         }
     });
 
