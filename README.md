@@ -46,6 +46,11 @@ npm install
   - Extact its folder into project and rename the folder to `mongodb`
   - Create folder `database` inside `mongodb` folder
   
+- prisma: Config mongodb uri in `.env` file
+```
+DATABASE_URL="mongodb://localhost:27017/askme"
+```
+  
 - mongodb: Running server
 
   - Running mongodb using `npm run db`
