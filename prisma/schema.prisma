@@ -22,7 +22,7 @@ model User {
     activationDate    DateTime   @default(now())
     email             String     @unique
     instagramId       String     @unique
-    primaryQuestionId String     @default("") @db.ObjectId
+    primaryQuestionId String     @default("") 
     questions         Question[]
 }
 
