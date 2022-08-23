@@ -14,7 +14,8 @@ module.exports = {
                 primary: '#E64398',
             },
             fontFamily: {
-                Prompt: ['Prompt', 'sans-serif']
+                Prompt: ['Prompt', 'sans-serif'],
+                Montserrat: ['Montserrat', 'sans-serif']
             }
         },
     },
