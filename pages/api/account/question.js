@@ -11,7 +11,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     if (req.method == 'GET' || req.method == 'POST') {
         await prisma.$connect();
 
-        userDB = await prisma.User.findFirst({
+        userDB = await prisma.user.findFirst({
             where: {
                 email: user.email
             },
