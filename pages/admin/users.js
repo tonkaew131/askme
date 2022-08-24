@@ -15,7 +15,7 @@ function SearchMenu(props) {
         <div className="text-black font-Prompt mx-4 mt-4">
             <div className="flex">
                 <p className="text-3xl font-semibold">Manage user</p>
-                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6"/>
+                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6" />
             </div>
 
             <div className="mt-3 sm:flex sm:mt-5">
@@ -41,6 +41,15 @@ function SearchMenu(props) {
 function UserTable(props) {
     let length = props.users.length;
     // console.log(props.users);
+
+    if (length == 0) {
+        return (
+            <div className="text-black font-mono font-bold flex justify-center items-center h-48 text-center text-lg">
+                Can&apos;t seem to<br />
+                find any users!
+            </div>
+        );
+    }
 
     return (
         <div className="mx-4 mt-4 rounded overflow-clip shadow font-Prompt">
