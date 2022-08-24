@@ -28,9 +28,9 @@ export default function NavbarAdmin() {
                         <p className="ml-5 py-4 bg-slate-800 hover:text-gray-500 hover:cursor-pointer">Home</p>
                     </Link>
                     <div className="bg-gray-700 w-full h-[2px]" />
-                    <a href="/admin/users">
+                    <Link href="/admin/users">
                         <p className="ml-5 py-4 bg-primary-bg2 hover:text-gray-500 hover:cursor-pointer">Manage users</p>
-                    </a>
+                    </Link>
                     <div className="bg-gray-700 w-full h-[2px]" />
                     <Link href="/api/auth/logout">
                         <p className="ml-5 py-4 bg-primary-bg2 hover:text-gray-500 hover:cursor-pointer">Logout</p>
