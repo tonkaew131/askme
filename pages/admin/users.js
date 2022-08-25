@@ -92,17 +92,17 @@ function AddNewUser(props) {
         <div className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50">
             <div className="absolute w-80 h-min top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow rounded-md text-black font-Prompt">
                 {/* Head */}
-                <p className="text-2xl m-3 ml-5 py-1">Add user</p>
+                <p className="text-2xl m-3 ml-5 py-1 select-none">Add user</p>
                 <div className="bg-gray-300 w-full h-[1px]" />
 
                 <div className="m-3 sm:m-4">
                     {/* Email */}
-                    <div className="font-semibold mb-1 flex ml-1">Email<p className="text-red-500 ml-1">*</p></div>
-                    <input type="text" className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+                    <div className="font-semibold mb-1 ml-1 flex select-none">Email<p className="text-red-500 ml-1">*</p></div>
+                    <input type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
 
                     {/* Instagram Id */}
-                    <div className="font-semibold mb-1 mt-3 ml-1 flex">Instagram Id<p className="text-red-500 ml-1">*</p></div>
-                    <input type="text" className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+                    <div className="font-semibold mb-1 mt-3 ml-1 flex select-none">Instagram Id<p className="text-red-500 ml-1">*</p></div>
+                    <input type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
 
                     {/* Bottons */}
                     <div className="flex mt-5">
