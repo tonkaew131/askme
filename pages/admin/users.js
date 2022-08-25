@@ -13,18 +13,23 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 function SearchMenu(props) {
     return (
         <div className="text-black font-Prompt mx-4 mt-4">
+            {/* Head */}
             <div className="flex">
-                <p className="text-3xl font-semibold">Manage user</p>
-                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6" />
+                <p className="text-3xl font-semibold select-none">Manage user</p>
+                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6" onClick={() => props.toggleAddUserMenu()} />
             </div>
 
+            {/* Body */}
             <div className="mt-3 sm:flex sm:mt-5">
+                {/* Search */}
                 <div className="sm:flex">
-                    <p className="mb-1 sm:my-auto sm:mr-3">Search: </p>
-                    <input placeholder={`${props.count} users...`} className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full"></input>
+                    <p className="mb-1 sm:my-auto sm:mr-3 select-none">Search: </p>
+                    <input placeholder={`${props.count} users...`} className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
                 </div>
+
+                {/* Roles */}
                 <div className="sm:flex mt-1 sm:mt-0 sm:ml-5">
-                    <p className="mb-1 sm:my-auto sm:mr-3">Roles: </p>
+                    <p className="mb-1 sm:my-auto sm:mr-3 select-none">Roles: </p>
                     <select name="roles" id="roles" defaultValue="ALL" className="bg-white shadow py-2 px-3 rounded focus:outline-none">
                         <option value="ALL">All</option>
                         <option value="ADMIN">Admin</option>
@@ -61,7 +66,7 @@ function UserTable(props) {
                                 <div className="flex">
                                     <p className="font-bold text-lg">@{user.instagramId}</p>
                                     {user.role == 'ADMIN' ?
-                                        <FaWrench className="my-auto ml-1" color="#3B82F6" />
+                                        <FaWrench className="my-auto ml-2" color="#3B82F6" />
                                         : undefined
                                     }
                                 </div>
@@ -69,7 +74,6 @@ function UserTable(props) {
                             </div>
                             <button type="button" className="mr-2 underline text-blue-500 font-bold px-3">Edit</button>
                         </div>
-
 
                         {index < length - 1 ?
                             <div className="w-full h-[1px] bg-gray-300" />
@@ -82,12 +86,47 @@ function UserTable(props) {
     );
 }
 
+// Component
+function AddNewUser(props) {
+    return (
+        <div className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50">
+            <div className="absolute w-80 h-min top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow rounded-md text-black font-Prompt">
+                {/* Head */}
+                <p className="text-2xl m-3 ml-5 py-1">Add user</p>
+                <div className="bg-gray-300 w-full h-[1px]" />
+
+                <div className="m-3 sm:m-4">
+                    {/* Email */}
+                    <div className="font-semibold mb-1 flex ml-1">Email<p className="text-red-500 ml-1">*</p></div>
+                    <input type="text" className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+
+                    {/* Instagram Id */}
+                    <div className="font-semibold mb-1 mt-3 ml-1 flex">Instagram Id<p className="text-red-500 ml-1">*</p></div>
+                    <input type="text" className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+
+                    {/* Bottons */}
+                    <div className="flex mt-5">
+                        <button className="bg-gray-200 px-3 py-1 rounded shadow mx-auto mr-2" onClick={() => props.toggleAddUserMenu()}>Close</button>
+                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export default withPageAuthRequired(function User({ user }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
     const [usersData, setUsersData] = useState([]);
     const [userCount, setUserCount] = useState(0);
+
+    const [addUserMenu, setAddUserMenu] = useState(false);
+
+    function handleToggleAddUserMenu() {
+        return setAddUserMenu(!addUserMenu);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -128,8 +167,16 @@ export default withPageAuthRequired(function User({ user }) {
             </Head>
 
             <NavbarAdmin />
-            <SearchMenu count={userCount} />
+            <SearchMenu
+                count={userCount}
+                toggleAddUserMenu={() => handleToggleAddUserMenu()}
+            />
             <UserTable users={usersData} />
+
+            {addUserMenu ?
+                <AddNewUser toggleAddUserMenu={() => handleToggleAddUserMenu()} />
+                : undefined
+            }
         </div>
     );
 });
