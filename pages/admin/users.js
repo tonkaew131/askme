@@ -98,16 +98,23 @@ function AddNewUser(props) {
                 <div className="m-3 sm:m-4">
                     {/* Email */}
                     <div className="font-semibold mb-1 ml-1 flex select-none">Email<p className="text-red-500 ml-1">*</p></div>
-                    <input type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+                    <input onChange={(e) => props.onEmailChange(e.target.value)} type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
 
                     {/* Instagram Id */}
                     <div className="font-semibold mb-1 mt-3 ml-1 flex select-none">Instagram Id<p className="text-red-500 ml-1">*</p></div>
-                    <input type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+                    <input onChange={(e) => props.onInstagramIdChange(e.target.value)} type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+
+                    {/* Alert */}
+                    {props.message != '' ?
+                        <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>User Created!</p>
+                        : undefined
+                    }
+
 
                     {/* Bottons */}
                     <div className="flex mt-5">
                         <button className="bg-gray-200 px-3 py-1 rounded shadow mx-auto mr-2" onClick={() => props.toggleAddUserMenu()}>Close</button>
-                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white">Submit</button>
+                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white" onClick={() => props.addNewUser()}>Submit</button>
                     </div>
                 </div>
             </div>
@@ -123,31 +130,60 @@ export default withPageAuthRequired(function User({ user }) {
     const [userCount, setUserCount] = useState(0);
 
     const [addUserMenu, setAddUserMenu] = useState(false);
+    const [addUserError, setAddUserError] = useState(false);
+    const [addUserMessage, setAddUserMessage] = useState('');
+    const [addUserEmail, setAddUserEmail] = useState('');
+    const [addUserInstagramId, setAddUserInstagramId] = useState('');
 
     function handleToggleAddUserMenu() {
+        if (!addUserMenu) {
+            setAddUserMessage('');
+        }
+
         return setAddUserMenu(!addUserMenu);
     }
 
+    async function handleAddNewUser() {
+        const email = addUserEmail;
+        const instagramId = addUserInstagramId;
+
+        const res = await fetch(`/api/admin/user?email=${email}&instagramId=${instagramId}`, {
+            method: 'POST'
+        });
+        const json = await res.json();
+
+        if ('error' in json) {
+            setAddUserError(true);
+            setAddUserMessage(json.error.message);
+            return;
+        }
+
+        setAddUserError(false);
+        setAddUserMessage('User created!');
+        fetchUsers().catch(error => console.error(error));
+        return;
+    }
+
+    const fetchUsers = async () => {
+        var data = await fetch(`/api/admin/user`);
+        var json = await data.json();
+        setLoading(false);
+
+        if (data.status == 200) {
+            setUsersData(json.data.users);
+            setUserCount(json.data.count);
+            return;
+        }
+
+        if ('error' in json) {
+            return setError(json.error.message);
+        }
+
+        console.log(json); // For Error
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            var data = await fetch(`/api/admin/user`);
-            var json = await data.json();
-            setLoading(false);
-
-            if (data.status == 200) {
-                setUsersData(json.data.users);
-                setUserCount(json.data.count);
-                return;
-            }
-
-            if ('error' in json) {
-                return setError(json.error.message);
-            }
-
-            console.log(json); // For Error
-        };
-
-        fetchData().catch(error => console.error(error));
+        fetchUsers().catch(error => console.error(error));
     }, []);
 
     if (loading) return (
@@ -174,7 +210,14 @@ export default withPageAuthRequired(function User({ user }) {
             <UserTable users={usersData} />
 
             {addUserMenu ?
-                <AddNewUser toggleAddUserMenu={() => handleToggleAddUserMenu()} />
+                <AddNewUser
+                    toggleAddUserMenu={() => handleToggleAddUserMenu()}
+                    addNewUser={() => handleAddNewUser()}
+                    error={addUserError}
+                    message={addUserMessage}
+                    onEmailChange={(email) => setAddUserEmail(email)}
+                    onInstagramIdChange={(instagramId) => setAddUserInstagramId(instagramId)}
+                />
                 : undefined
             }
         </div>

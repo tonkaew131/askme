@@ -63,14 +63,33 @@ export default withApiAuthRequired(async function handler(req, res) {
 
     // Add new user
     if (req.method == 'POST') {
-        // await prisma.$connect();
-        // const User = await prisma.user.create({
-        //     data: {
-        //         email: 'nongtonkaew@gmail.com',
-        //         instagramId: 'tonkaew131'
-        //     }
-        // })
-        // PLEASE DO NOT FUCKING PUT THIS ON THE PRODUCTION
+        const { email, instagramId } = req.query;
+        if (email == undefined || instagramId == undefined || email == '' || instagramId == '') {
+            prisma.$disconnect(); // No need to wait
+            return res.status(400).json({
+                error: {
+                    code: 400,
+                    message: 'Bad Request, missing email/instagramId params'
+                }
+            });
+        }
+
+
+
+        const createdUser = await prisma.user.create({
+            data: {
+                email: email,
+                instagramId: instagramId
+            }
+        });
+
+        prisma.$disconnect(); // No need to await
+        return res.status(200).json({
+            data: {
+                message: 'Resource updated successfully',
+                data: createdUser
+            }
+        });
     }
 
     return res.status(501).json({
