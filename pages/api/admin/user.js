@@ -1,6 +1,8 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import { PrismaClient } from '@prisma/client'
 
+import { emailValidator } from './../../../shared/utils';
+
 const prisma = new PrismaClient();
 
 export default withApiAuthRequired(async function handler(req, res) {
@@ -74,7 +76,14 @@ export default withApiAuthRequired(async function handler(req, res) {
             });
         }
 
-
+        if(emailValidator(email) == false) {
+            return res.status(400).json({
+                error: {
+                    code: 400,
+                    message: 'Bad Request, invalid email'
+                }
+            });
+        }
 
         const createdUser = await prisma.user.create({
             data: {

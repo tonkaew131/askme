@@ -106,7 +106,7 @@ function AddNewUser(props) {
 
                     {/* Alert */}
                     {props.message != '' ?
-                        <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>User Created!</p>
+                        <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>{props.message}</p>
                         : undefined
                     }
 
@@ -154,7 +154,7 @@ export default withPageAuthRequired(function User({ user }) {
 
         if ('error' in json) {
             setAddUserError(true);
-            setAddUserMessage(json.error.message);
+            setAddUserMessage(json.error.message || 'Error!');
             return;
         }
 
