@@ -65,20 +65,14 @@ function UserTable(props) {
                             <div className="py-2 px-3 mx-auto ml-0">
                                 <div className="flex">
                                     <p className="font-bold text-lg">@{user.instagramId}</p>
-                                    {user.role == 'ADMIN' ?
-                                        <FaWrench className="my-auto ml-2" color="#3B82F6" />
-                                        : undefined
-                                    }
+                                    {user.role == 'ADMIN' && <FaWrench className="my-auto ml-2" color="#3B82F6" />}
                                 </div>
                                 <p className="text-gray-500">{user.email}</p>
                             </div>
                             <button type="button" className="mr-2 underline text-blue-500 font-bold px-3">Edit</button>
                         </div>
 
-                        {index < length - 1 ?
-                            <div className="w-full h-[1px] bg-gray-300" />
-                            : undefined
-                        }
+                        {(index < length - 1) && <div className="w-full h-[1px] bg-gray-300" />}
                     </div>
                 );
             })}
@@ -173,10 +167,7 @@ export default withPageAuthRequired(function User({ user }) {
             />
             <UserTable users={usersData} />
 
-            {addUserMenu ?
-                <AddNewUser toggleAddUserMenu={() => handleToggleAddUserMenu()} />
-                : undefined
-            }
+            {addUserMenu && <AddNewUser toggleAddUserMenu={() => handleToggleAddUserMenu()} />}
         </div>
     );
 });
