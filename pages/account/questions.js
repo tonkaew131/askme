@@ -21,17 +21,30 @@ function SearchMenu(props) {
             <div className="mt-3 sm:flex sm:mt-5">
                 {/* Search */}
                 <div className="sm:flex">
-                    <p className="mb-1 sm:my-auto sm:mr-3 select-none">Search: </p>
+                    <p className="mb-1 sm:my-auto sm:mr-3 select-none">ค้นหา: </p>
                     <input placeholder={`${props.count} questions...`} className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
                 </div>
 
-                {/* Types */}
-                <div className="sm:flex mt-1 sm:mt-0 sm:ml-5">
-                    <p className="mb-1 sm:my-auto sm:mr-3 select-none">Types: </p>
-                    <select name="types" id="types" defaultValue="ALL" className="bg-white shadow py-2 px-3 rounded focus:outline-none">
-                        <option value="ALL">All</option>
-                    </select>
+                <div className="flex">
+                    {/* Types */}
+                    <div className="sm:flex mt-1 sm:mt-0 sm:ml-5">
+                        <p className="mb-1 sm:my-auto sm:mr-3 select-none">ประเภท: </p>
+                        <select name="types" id="types" defaultValue="ALL" className="bg-white shadow py-2 px-3 rounded focus:outline-none">
+                            <option value="ALL">All</option>
+                        </select>
+                    </div>
+
+                    {/* Sort by */}
+                    <div className="sm:flex mt-1 ml-5">
+                        <p className="mb-1 sm:my-auto sm:mr-3 select-none">เรียงโดย: </p>
+                        <select name="sortBy" id="sortBy" defaultValue="DATE_ASCENT" className="bg-white shadow py-2 px-3 rounded focus:outline-none">
+                            <option value="DATE_ASCENT">ล่าสุด</option>
+                            <option value="DATE_DESCENT">เก่าสุด</option>
+                            <option value="NUMBER_OF_ANSWER_ASCENT">จำนวนคำตอบ</option>
+                        </select>
+                    </div>
                 </div>
+
             </div>
         </div>
     );
