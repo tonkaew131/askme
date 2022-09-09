@@ -1,27 +1,23 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { PrismaClient } from '@prisma/client'
 
 import { emailValidator } from './../../../shared/utils';
 
-const prisma = new PrismaClient();
+import prisma from '../../../shared/prisma';
 
 export default withApiAuthRequired(async function handler(req, res) {
     const { user } = getSession(req, res);
-    let userDB = null;
+    let userDb = null;
 
     // Check if user's admin
     if (req.method == 'GET' || req.method == 'POST') {
-        await prisma.$connect();
-
-        userDB = await prisma.user.findFirst({
+        userDb = await prisma.user.findFirst({
             where: {
                 email: user.email
             }
         });
 
         // Check if User do not exist
-        if (userDB == null) {
-            prisma.$disconnect();
+        if (userDb == null) {
             return res.status(404).json({
                 error: {
                     code: 404,
@@ -31,8 +27,7 @@ export default withApiAuthRequired(async function handler(req, res) {
         }
 
         // Check if User is ADMIN
-        if (userDB.role != 'ADMIN') {
-            prisma.$disconnect();
+        if (userDb.role != 'ADMIN') {
             return res.status(401).json({
                 error: {
                     code: 401,
@@ -54,7 +49,6 @@ export default withApiAuthRequired(async function handler(req, res) {
         let users = await prisma.user.findMany();
         let userCount = await prisma.user.count();
 
-        prisma.$disconnect();
         return res.status(200).json({
             data: {
                 users: users,
@@ -67,7 +61,6 @@ export default withApiAuthRequired(async function handler(req, res) {
     if (req.method == 'POST') {
         const { email, instagramId } = req.query;
         if (email == undefined || instagramId == undefined || email == '' || instagramId == '') {
-            prisma.$disconnect(); // No need to wait
             return res.status(400).json({
                 error: {
                     code: 400,
@@ -76,11 +69,29 @@ export default withApiAuthRequired(async function handler(req, res) {
             });
         }
 
-        if(emailValidator(email) == false) {
+        if (emailValidator(email) == false) {
             return res.status(400).json({
                 error: {
                     code: 400,
                     message: 'Bad Request, invalid email'
+                }
+            });
+        }
+
+        let targetUserDb = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: { equals: email } },
+                    { instagramId: { equals: instagramId } }
+                ]
+            }
+        });
+        // Check if email or instagramId exists
+        if (targetUserDb != null) {
+            return res.status(409).json({
+                error: {
+                    code: 409,
+                    message: 'Email or InstagramId is already use'
                 }
             });
         }
@@ -92,7 +103,6 @@ export default withApiAuthRequired(async function handler(req, res) {
             }
         });
 
-        prisma.$disconnect(); // No need to await
         return res.status(200).json({
             data: {
                 message: 'Resource updated successfully',
