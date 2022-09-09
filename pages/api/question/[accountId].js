@@ -1,11 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+import prisma from '../../../shared/prisma';
 
 export default async function handler(req, res) {
     const { accountId } = req.query;
 
-    await prisma.$connect();
     const user = await prisma.user.findFirst({
         where: {
             instagramId: accountId
@@ -14,7 +13,6 @@ export default async function handler(req, res) {
 
     // If user doesn't exist
     if (user == null) {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -25,7 +23,6 @@ export default async function handler(req, res) {
 
     // If user doesn't have primary question
     if (user.primaryQuestionId == '') {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -42,7 +39,6 @@ export default async function handler(req, res) {
 
     // Error in system???
     if (question == null) {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -61,7 +57,6 @@ export default async function handler(req, res) {
             }
         })
 
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -71,7 +66,6 @@ export default async function handler(req, res) {
     }
 
     delete question['isDeleted']; // pointless, but cool
-    prisma.$disconnect(); // No need to wait
 
     res.status(200).json({
         data: question
