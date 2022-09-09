@@ -99,9 +99,8 @@ function AddNewUser(props) {
                     <input onChange={(e) => props.onInstagramIdChange(e.target.value)} type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
 
                     {/* Alert */}
-                    {props.message != '' ?
+                    {(props.message != '') &&
                         <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>{props.message}</p>
-                        : undefined
                     }
 
 
@@ -140,6 +139,12 @@ export default withPageAuthRequired(function User({ user }) {
     async function handleAddNewUser() {
         const email = addUserEmail;
         const instagramId = addUserInstagramId;
+
+        if (email == '' || instagramId == '') {
+            setAddUserError(true);
+            setAddUserMessage('Email or InstagramId can\'t be empty');
+            return;
+        }
 
         const res = await fetch(`/api/admin/user?email=${email}&instagramId=${instagramId}`, {
             method: 'POST'
