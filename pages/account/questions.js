@@ -1,6 +1,7 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import Head from 'next/head';
+import React, { useState } from 'react';
 
 import Navbar from '../../components/Navbar';
 
@@ -14,7 +15,7 @@ function SearchMenu(props) {
             {/* Head */}
             <div className="flex">
                 <p className="text-3xl font-semibold select-none">My Questions</p>
-                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6" onClick={() => props.toggleAddUserMenu()} />
+                <AiFillPlusCircle size="2em" className="my-auto ml-2 hover:cursor-pointer" color="#3B82F6" onClick={() => props.toggleAddQuestionMenu()} />
             </div>
 
             {/* Body */}
@@ -22,7 +23,7 @@ function SearchMenu(props) {
                 {/* Search */}
                 <div className="sm:flex">
                     <p className="mb-1 sm:my-auto sm:mr-3 select-none font-bold text-lg">ค้นหา: </p>
-                    <input placeholder={`${props.count} questions...`} className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+                    <input placeholder={`${props.count} คำถาม...`} className="bg-white shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
                 </div>
 
                 <div className="flex">
@@ -45,6 +46,36 @@ function SearchMenu(props) {
                     </div>
                 </div>
 
+            </div>
+        </div>
+    );
+}
+
+// Component
+function AddNewQuestion(props) {
+    return (
+        <div className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50">
+            <div className="absolute w-80 h-min top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow rounded-md text-black font-Prompt">
+                {/* Head */}
+                <p className="text-2xl m-3 ml-5 py-1 select-none">เพิ่มคำถาม</p>
+                <div className="bg-gray-300 w-full h-[1px]" />
+
+                <div className="m-3 sm:m-4">
+                    {/* Question Title */}
+                    <div className="font-semibold mb-1 ml-1 flex select-none">คำถาม<p className="text-red-500 ml-1">*</p></div>
+                    <input onChange={(e) => props.onTitleChange(e.target.value)} type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
+
+                    {/* Alert */}
+                    {(props.message != '') &&
+                        <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>{props.message}</p>
+                    }
+
+                    {/* Bottons */}
+                    <div className="flex mt-5">
+                        <button className="bg-gray-200 px-3 py-1 rounded shadow mx-auto mr-2" onClick={() => props.toggleAddQuestionMenu()}>ปิด</button>
+                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white" onClick={() => props.addNewUser()}>ยืนยัน</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -90,7 +121,17 @@ function UserTable(props) {
 }
 
 export default withPageAuthRequired(function Profile({ user }) {
-    let data = { "data": { "questions": [{ "id": "62fa53b2fd2c6dacc6ca24f4", "createdAt": "2022-08-15T14:09:54.722Z", "isDeleted": false, "title": "กระต่ายกับเต่าใครเกิดก่อนกัน", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa5688ce4956981e6a5f60", "createdAt": "2022-08-15T14:22:00.775Z", "isDeleted": false, "title": "จะถามอะไรนักหนาว่ะ", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa57f641bb549d0f31da01", "createdAt": "2022-08-15T14:28:06.002Z", "isDeleted": false, "title": "System test 2", "userId": "62f9107f82af3d4e53663789" }] } };
+    const [addQuestionMenu, setAddQuestionMenu] = useState(false);
+
+    function handleToggleAddQuestionMenu() {
+        if (!addQuestionMenu) {
+            setAddQuestionMenu('');
+        }
+
+        return setAddQuestionMenu(!addQuestionMenu);
+    }
+
+    let data = { "data": { "questions": [{ "id": "62fa53b2fd2c6dacc6ca24f4", "type": "TEXT", "createdAt": "2022-08-15T14:09:54.722Z", "isDeleted": false, "title": "กระต่ายกับเต่าใครเกิดก่อนกัน", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa5688ce4956981e6a5f60", "type": "TEXT", "createdAt": "2022-08-15T14:22:00.775Z", "isDeleted": false, "title": "จะถามอะไรนักหนาว่ะ", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa57f641bb549d0f31da01", "type": "TEXT", "createdAt": "2022-08-15T14:28:06.002Z", "isDeleted": false, "title": "System test 2", "userId": "62f9107f82af3d4e53663789" }] } };
     data = data.data.questions;
 
     return (
@@ -100,10 +141,21 @@ export default withPageAuthRequired(function Profile({ user }) {
             </Head>
 
             <Navbar />
-            <SearchMenu />
+            <SearchMenu
+                toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
+            />
             <UserTable
                 questions={data}
             />
+
+            {addQuestionMenu && <AddNewQuestion
+                toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
+                // addNewUser={() => handleAddNewUser()}
+                // error={addUserError}
+                // message={addUserMessage}
+                // onEmailChange={(email) => setAddUserEmail(email)}
+                // onInstagramIdChange={(instagramId) => setAddUserInstagramId(instagramId)}
+            />}
         </div>
     );
 });
