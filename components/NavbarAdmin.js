@@ -23,15 +23,22 @@ export default function NavbarAdmin() {
                         <div className={`transition-all duration-700 w-6 h-[3px] bg-white my-[3px] rounded-md ${menuState ? "-rotate-[405deg] -translate-y-[6px]" : ""}`} />
                     </div>
                 </div>
+
+                {/* Mobile Version */}
                 <div className={`fixed z-10 top-0 left-0 w-full text-xl h-screen overflow-y-auto bg-slate-800 transition-all duration-300 ${menuState ? "translate-y-0" : "-translate-y-full"}`}>
+                    {/* Home */}
                     <Link href="/">
                         <p className="ml-5 py-4 bg-slate-800 hover:text-gray-500 hover:cursor-pointer">Home</p>
                     </Link>
                     <div className="bg-gray-700 w-full h-[2px]" />
+
+                    {/* Manage Users */}
                     <Link href="/admin/users">
                         <p className="ml-5 py-4 bg-primary-bg2 hover:text-gray-500 hover:cursor-pointer">Manage users</p>
                     </Link>
                     <div className="bg-gray-700 w-full h-[2px]" />
+
+                    {/* Logout */}
                     <Link href="/api/auth/logout">
                         <p className="ml-5 py-4 bg-primary-bg2 hover:text-gray-500 hover:cursor-pointer">Logout</p>
                     </Link>
@@ -39,7 +46,9 @@ export default function NavbarAdmin() {
                 </div>
             </div>
 
+            {/* Desktop Version */}
             <div className="my-auto float-right font-medium hidden sm:flex">
+                {/* Logout */}
                 <Link href="/api/auth/logout">
                     <p className="mx-5 hover:text-gray-500 hover:cursor-pointer">Logout</p>
                 </Link>
