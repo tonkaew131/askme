@@ -13,7 +13,13 @@ export default withApiAuthRequired(async function handler(req, res) {
                 email: user.email
             },
             include: {
-                questions: true
+                questions: {
+                    include: {
+                        _count: {
+                            select: { answers: true }
+                        }
+                    }
+                }
             }
         });
 
@@ -72,7 +78,7 @@ export default withApiAuthRequired(async function handler(req, res) {
                 }, data: {
                     primaryQuestionId: question.id
                 }
-            })
+            });
         }
 
         return res.status(200).json({
