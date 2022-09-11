@@ -1,6 +1,7 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import Head from 'next/head';
+import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
 import Navbar from '../../components/Navbar';
@@ -74,7 +75,7 @@ function AddNewQuestion(props) {
                     {/* Bottons */}
                     <div className="flex mt-5">
                         <button className="bg-gray-200 px-3 py-1 rounded shadow mx-auto mr-2" onClick={() => props.toggleAddQuestionMenu()}>ปิด</button>
-                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white" onClick={() => props.addNewUser()}>ยืนยัน</button>
+                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white" onClick={() => props.addNewQuestion()}>ยืนยัน</button>
                     </div>
                 </div>
             </div>
@@ -108,7 +109,9 @@ function UserTable(props) {
                                 </div>
 
                                 {/* Click to see answer */}
-                                <button type="button" className="text-blue-500 underline font-bold">&gt; ดูคำตอบ ({question._count.answers})</button>
+                                <Link href={`/account/question/${question.id}`}>
+                                    <button type="button" className="text-blue-500 underline font-bold">&gt; ดูคำตอบ ({question._count.answers})</button>
+                                </Link>
                             </div>
                             <button type="button" className="mr-2 underline text-blue-500 font-bold px-3">แก้ไข</button>
                         </div>
