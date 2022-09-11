@@ -35,7 +35,6 @@ export default withApiAuthRequired(async function handler(req, res) {
         });
     }
 
-
     // Get list of User's questions
     if (req.method == 'GET') {
         return res.status(200).json({
