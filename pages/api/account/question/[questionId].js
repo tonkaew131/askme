@@ -3,6 +3,7 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 import prisma from '../../../../shared/prisma';
 
 export default withApiAuthRequired(async function handler(req, res) {
+    const { questionId } = req.query;
     const { user } = getSession(req, res);
     let userDb = null;
 
@@ -36,7 +37,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     if (req.method == 'GET') {
         const question = await prisma.question.findFirst({
             where: {
-                id: userDb.primaryQuestionId
+                id: questionId
             },
             include: {
                 answers: true
