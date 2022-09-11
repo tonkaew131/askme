@@ -1,9 +1,10 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Navbar from '../../components/Navbar';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 // Icons
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -107,7 +108,7 @@ function UserTable(props) {
                                 </div>
 
                                 {/* Click to see answer */}
-                                <button type="button" className="text-blue-500 underline font-bold">&gt; ดูคำตอบ (0)</button>
+                                <button type="button" className="text-blue-500 underline font-bold">&gt; ดูคำตอบ ({question._count.answers})</button>
                             </div>
                             <button type="button" className="mr-2 underline text-blue-500 font-bold px-3">แก้ไข</button>
                         </div>
@@ -121,6 +122,10 @@ function UserTable(props) {
 }
 
 export default withPageAuthRequired(function Profile({ user }) {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    const [questionData, setQuestionData] = useState([]);
     const [addQuestionMenu, setAddQuestionMenu] = useState(false);
 
     function handleToggleAddQuestionMenu() {
@@ -131,8 +136,34 @@ export default withPageAuthRequired(function Profile({ user }) {
         return setAddQuestionMenu(!addQuestionMenu);
     }
 
-    let data = { "data": { "questions": [{ "id": "62fa53b2fd2c6dacc6ca24f4", "type": "TEXT", "createdAt": "2022-08-15T14:09:54.722Z", "isDeleted": false, "title": "กระต่ายกับเต่าใครเกิดก่อนกัน", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa5688ce4956981e6a5f60", "type": "TEXT", "createdAt": "2022-08-15T14:22:00.775Z", "isDeleted": false, "title": "จะถามอะไรนักหนาว่ะ", "userId": "62f9107f82af3d4e53663789" }, { "id": "62fa57f641bb549d0f31da01", "type": "TEXT", "createdAt": "2022-08-15T14:28:06.002Z", "isDeleted": false, "title": "System test 2", "userId": "62f9107f82af3d4e53663789" }] } };
-    data = data.data.questions;
+    async function fetchQuestion() {
+        var data = await fetch(`/api/account/question`);
+        var json = await data.json();
+
+        if (data.status == 200) {
+            setQuestionData(json.data.questions);
+            setLoading(false);
+            return;
+        }
+
+        if ('error' in json) {
+            return setError(json.error.message);
+        }
+
+        console.log(json); // For Error
+    }
+
+    useEffect(() => {
+        fetchQuestion().catch(error => console.error(error));
+    }, []);
+
+    if (loading) return (
+        <div className="flex justify-center items-center h-screen">
+            <LoadingSpinner className="scale-150 sm:scale-100" />
+        </div>
+    );
+
+    if (error) return error;
 
     return (
         <div className="bg-gray-100 w-screen min-h-screen h-full pb-5">
@@ -143,18 +174,19 @@ export default withPageAuthRequired(function Profile({ user }) {
             <Navbar />
             <SearchMenu
                 toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
+                count={questionData.length}
             />
             <UserTable
-                questions={data}
+                questions={questionData}
             />
 
             {addQuestionMenu && <AddNewQuestion
                 toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
-                // addNewUser={() => handleAddNewUser()}
-                // error={addUserError}
-                // message={addUserMessage}
-                // onEmailChange={(email) => setAddUserEmail(email)}
-                // onInstagramIdChange={(instagramId) => setAddUserInstagramId(instagramId)}
+            // addNewUser={() => handleAddNewUser()}
+            // error={addUserError}
+            // message={addUserMessage}
+            // onEmailChange={(email) => setAddUserEmail(email)}
+            // onInstagramIdChange={(instagramId) => setAddUserInstagramId(instagramId)}
             />}
         </div>
     );
