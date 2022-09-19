@@ -53,7 +53,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     // Add new question
     if (req.method == 'POST') {
         const { title } = req.query;
-        if (title == undefined) {
+        if (title == undefined || title == '') {
             return res.status(400).json({
                 error: {
                     code: 400,

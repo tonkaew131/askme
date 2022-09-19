@@ -4,8 +4,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
+// Main components
 import Navbar from '../../components/Navbar';
 import LoadingSpinner from '../../components/LoadingSpinner';
+
+// Page components
+import AddNewQuestion from '../../components/account/question/AddNewQuestion';
 
 // Icons
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -48,36 +52,6 @@ function SearchMenu(props) {
                     </div>
                 </div>
 
-            </div>
-        </div>
-    );
-}
-
-// Component
-function AddNewQuestion(props) {
-    return (
-        <div className="w-full h-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50">
-            <div className="absolute w-80 h-min top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow rounded-md text-black font-Prompt">
-                {/* Head */}
-                <p className="text-2xl m-3 ml-5 py-1 select-none">เพิ่มคำถาม</p>
-                <div className="bg-gray-300 w-full h-[1px]" />
-
-                <div className="m-3 sm:m-4">
-                    {/* Question Title */}
-                    <div className="font-semibold mb-1 ml-1 flex select-none">คำถาม<p className="text-red-500 ml-1">*</p></div>
-                    <input onChange={(e) => props.onTitleChange(e.target.value)} type="text" className="bg-gray-100 shadow py-2 px-3 rounded focus:outline-none w-full ring-blue-500 focus:ring-2"></input>
-
-                    {/* Alert */}
-                    {(props.message != '') &&
-                        <p className={`${props.error ? "text-red-500" : "text-green-500"} py-3 text-right font-mono`}>{props.message}</p>
-                    }
-
-                    {/* Bottons */}
-                    <div className="flex mt-5">
-                        <button className="bg-gray-200 px-3 py-1 rounded shadow mx-auto mr-2" onClick={() => props.toggleAddQuestionMenu()}>ปิด</button>
-                        <button className="bg-green-400 px-3 py-1 rounded shadow text-white" onClick={() => props.addNewQuestion()}>ยืนยัน</button>
-                    </div>
-                </div>
             </div>
         </div>
     );
@@ -132,8 +106,8 @@ export default withPageAuthRequired(function Profile({ user }) {
     const [addQuestionMenu, setAddQuestionMenu] = useState(false);
 
     function handleToggleAddQuestionMenu() {
-        if (!addQuestionMenu) {
-            setAddQuestionMenu('');
+        if (addQuestionMenu) {
+            fetchQuestion().catch(error => console.error(error));
         }
 
         return setAddQuestionMenu(!addQuestionMenu);
@@ -185,11 +159,7 @@ export default withPageAuthRequired(function Profile({ user }) {
 
             {addQuestionMenu && <AddNewQuestion
                 toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
-            // addNewUser={() => handleAddNewUser()}
-            // error={addUserError}
-            // message={addUserMessage}
-            // onEmailChange={(email) => setAddUserEmail(email)}
-            // onInstagramIdChange={(instagramId) => setAddUserInstagramId(instagramId)}
+                onCheckboxChange={(state) => handleCheckbox(state)}
             />}
         </div>
     );
