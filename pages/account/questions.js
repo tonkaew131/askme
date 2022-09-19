@@ -159,7 +159,6 @@ export default withPageAuthRequired(function Profile({ user }) {
 
             {addQuestionMenu && <AddNewQuestion
                 toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
-                onCheckboxChange={(state) => handleCheckbox(state)}
             />}
         </div>
     );
