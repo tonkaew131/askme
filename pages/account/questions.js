@@ -58,7 +58,7 @@ function SearchMenu(props) {
 }
 
 // Component
-function UserTable(props) {
+function QuestionTable(props) {
     let length = props.questions.length;
 
     if (length == 0) {
@@ -77,8 +77,8 @@ function UserTable(props) {
                     <div key={question.id} className={`text-black w-full ${index % 2 == 1 ? 'bg-white' : 'bg-blue-100'}`}>
                         <div className="flex">
                             <div className="py-2 px-3 mx-auto ml-0">
+                                {/* Question Title */}
                                 <div className="flex">
-                                    {/* Question Title */}
                                     <p className="font-bold text-lg">{question.title}</p>
                                 </div>
 
@@ -153,7 +153,7 @@ export default withPageAuthRequired(function Profile({ user }) {
                 toggleAddQuestionMenu={() => handleToggleAddQuestionMenu()}
                 count={questionData.length}
             />
-            <UserTable
+            <QuestionTable
                 questions={questionData}
             />
 
