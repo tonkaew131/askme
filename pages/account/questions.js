@@ -79,7 +79,7 @@ function QuestionTable(props) {
                             <div className="py-2 px-3 mx-auto ml-0">
                                 {/* Question Title */}
                                 <div className="flex">
-                                    <p className="font-bold text-lg">{question.title}</p>
+                                    <p className="font-bold text-lg break-all">{question.title}</p>
                                 </div>
 
                                 {/* Click to see answer */}

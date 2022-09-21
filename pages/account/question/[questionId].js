@@ -1,6 +1,7 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import Link from 'next/link';
+import Head from 'next/head';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 
@@ -94,10 +95,20 @@ export default withPageAuthRequired(function Profile({ user }) {
 
     return (
         <div className="bg-gray-100 w-screen min-h-screen h-full pb-5 text-black font-Prompt">
+            <Head>
+                <title>{data.title} | AskMe</title>
+            </Head>
+
             <Navbar />
 
-            <SearchMenu title={data.title} />
-            <AnswerTable answers={answers}/>
+            <SearchMenu
+                title={data.title}
+                count={answers.length}
+            />
+            <AnswerTable
+                answers={answers}
+                question={data.title}
+            />
         </div>
     );
 });
