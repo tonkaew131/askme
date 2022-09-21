@@ -1,7 +1,7 @@
 import { formatTimeAgo } from '../../../../shared/utils';
 
 import React, { useRef } from 'react';
-import { toCanvas } from 'html-to-image';
+import { toCanvas, toBlob } from 'html-to-image';
 
 // Icons
 import { AiFillClockCircle } from 'react-icons/ai';
@@ -11,6 +11,24 @@ import { FiDownload } from 'react-icons/fi';
 // Card
 function AnswerCard(props) {
     const exportRef = useRef();
+
+    const copyImageToClipboard = async () => {
+        const element = exportRef.current;
+        const pngBlob = await toBlob(element, {
+            pixelRatio: 3
+        });
+
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({
+                    [pngBlob.type]: pngBlob
+                })
+            ]);
+            console.log('Image copied!');
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleDownloadImage = async () => {
         const element = exportRef.current;
@@ -23,7 +41,7 @@ function AnswerCard(props) {
 
         if (typeof link.download === 'string') {
             link.href = data;
-            link.download = 'image.jpg';
+            link.download = 'askme.jpg';
 
             document.body.appendChild(link);
             link.click();
@@ -40,7 +58,7 @@ function AnswerCard(props) {
                 <div ref={exportRef} className="bg-gradient-to-bl from-red-400 to-pink-500 text-white rounded-3xl text-center py-10">
                     <p className="mb-4">{props.question}</p>
                     <div className="bg-gray-100 py-2 w-4/5 mx-auto text-black rounded break-words">
-                        <p className="mx-auto w-11/12">{props.text}</p>
+                        <p className="mx-auto w-11/12 text-lg">{props.text}</p>
                     </div>
                 </div>
             </div>
@@ -51,10 +69,10 @@ function AnswerCard(props) {
             </div>
 
             <div className="flex my-4 ml-4">
-                <div className="bg-blue-500 rounded-lg p-2 hover:cursor-pointer">
+                <div className="bg-blue-500 rounded-lg p-2 hover:cursor-pointer active:scale-95" onClick={(e) => copyImageToClipboard()}>
                     <FaRegCopy color="white" />
                 </div>
-                <div className="bg-blue-500 rounded-lg p-2 hover:cursor-pointer ml-2" onClick={(e) => handleDownloadImage()}>
+                <div className="bg-blue-500 rounded-lg p-2 hover:cursor-pointer active:scale-95 ml-2" onClick={(e) => handleDownloadImage()}>
                     <FiDownload color="white" />
                 </div>
             </div>
@@ -64,7 +82,6 @@ function AnswerCard(props) {
 
 export default function AnswerTable(props) {
     let answers = props.answers || [];
-    console.log(answers);
 
     if (answers.length == 0) {
         return (
