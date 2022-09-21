@@ -35,19 +35,29 @@ export default withApiAuthRequired(async function handler(req, res) {
 
     // Get list of User's questions
     if (req.method == 'GET') {
-        const question = await prisma.question.findFirst({
-            where: {
-                id: questionId
-            },
-            include: {
-                answers: true
-            }
-        })
+        let question;
+        try {
+            question = await prisma.question.findFirst({
+                where: {
+                    id: questionId
+                },
+                include: {
+                    answers: true
+                }
+            });
+        } catch (error) {
+            console.error(error);
+
+            return res.status(500).json({
+                error: {
+                    code: 500,
+                    message: 'Internal Server Error'
+                }
+            })
+        }
 
         return res.status(200).json({
-            data: {
-                answers: question.answers
-            }
+            data: question
         });
     }
 });

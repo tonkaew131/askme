@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 export default function AddNewQuestion(props) {
-    console.log('test');
-
     const [isPrimary, setIsPrimary] = useState(false);
     const [title, setTitle] = useState('');
 
@@ -18,7 +16,7 @@ export default function AddNewQuestion(props) {
 
         postQuestion().catch(error => {
             console.log(error);
-            
+
             setError(true);
             setMessage(error);
         });
