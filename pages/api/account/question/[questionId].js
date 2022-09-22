@@ -46,7 +46,14 @@ export default withApiAuthRequired(async function handler(req, res) {
                 }
             });
         } catch (error) {
-            console.error(error);
+            if(error.message.includes('Inconsistent column data: Malformed ObjectID')) {
+                return res.status(404).json({
+                    error: {
+                        code: 404,
+                        message: 'Not Found'
+                    }
+                })
+            }
 
             return res.status(500).json({
                 error: {

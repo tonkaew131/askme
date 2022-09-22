@@ -45,7 +45,8 @@ export default withApiAuthRequired(async function handler(req, res) {
     if (req.method == 'GET') {
         return res.status(200).json({
             data: {
-                questions: userDB.questions
+                questions: userDB.questions,
+                primaryQuestionId: userDB.primaryQuestionId
             }
         });
     }

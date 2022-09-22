@@ -1,4 +1,5 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { formatTimeAgo } from '../../shared/utils';
 
 import Head from 'next/head';
 import Link from 'next/link';
@@ -12,7 +13,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import AddNewQuestion from '../../components/account/question/AddNewQuestion';
 
 // Icons
-import { AiFillPlusCircle } from 'react-icons/ai';
+import { AiFillPlusCircle, AiFillClockCircle, AiFillStar } from 'react-icons/ai';
 
 // Component
 function SearchMenu(props) {
@@ -79,15 +80,26 @@ function QuestionTable(props) {
                             <div className="py-2 px-3 mx-auto ml-0">
                                 {/* Question Title */}
                                 <div className="flex">
+                                    {props.id == question.id &&
+                                        <AiFillStar className="my-auto mr-1 text-blue-500" />
+                                    }
                                     <p className="font-bold text-lg break-all">{question.title}</p>
+                                </div>
+
+                                {/* Time ago */}
+                                <div className="flex text-gray-500 text-sm">
+                                    <AiFillClockCircle className="my-auto mr-1" />
+                                    {formatTimeAgo(new Date(question.createdAt))}
                                 </div>
 
                                 {/* Click to see answer */}
                                 <Link href={`/account/question/${question.id}`}>
-                                    <button type="button" className="text-blue-500 underline font-bold">&gt; ดูคำตอบ ({question._count.answers})</button>
+                                    <button type="button" className="text-blue-500 underline font-bold select-none">&gt; ดูคำตอบ ({question._count.answers})</button>
                                 </Link>
                             </div>
-                            <button type="button" className="mr-2 underline text-blue-500 font-bold px-3">แก้ไข</button>
+
+                            {/* Edit button */}
+                            <button type="button" className="mr-2 underline text-blue-500 font-bold px-3 select-none">แก้ไข</button>
                         </div>
 
                         {(index < length - 1) && <div className="w-full h-[1px] bg-gray-300" />}
@@ -102,6 +114,7 @@ export default withPageAuthRequired(function Profile({ user }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const [questionId, setQuestionId] = useState();
     const [questionData, setQuestionData] = useState([]);
     const [addQuestionMenu, setAddQuestionMenu] = useState(false);
 
@@ -118,6 +131,7 @@ export default withPageAuthRequired(function Profile({ user }) {
         var json = await data.json();
 
         if (data.status == 200) {
+            setQuestionId(json.data.primaryQuestionId);
             setQuestionData(json.data.questions);
             setLoading(false);
             return;
@@ -154,6 +168,7 @@ export default withPageAuthRequired(function Profile({ user }) {
                 count={questionData.length}
             />
             <QuestionTable
+                id={questionId}
                 questions={questionData}
             />
 
