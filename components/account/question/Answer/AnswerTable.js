@@ -38,6 +38,10 @@ function AnswerCard(props) {
 
         const data = canvas.toDataURL('image/jpg');
         const link = document.createElement('a');
+        link.setAttribute(
+            'style',
+            'visibility: hidden;',
+        );
 
         if (typeof link.download === 'string') {
             link.href = data;
@@ -63,11 +67,13 @@ function AnswerCard(props) {
                 </div>
             </div>
 
+            {/* Time ago */}
             <div className="flex text-gray-500 mt-4 ml-4">
                 <AiFillClockCircle className="my-auto mr-1" />
                 {formatTimeAgo(props.date)}
             </div>
 
+            {/* Copy to Clipboard & Download */}
             <div className="flex my-4 ml-4">
                 <div className="bg-blue-500 rounded-lg p-2 hover:cursor-pointer active:scale-95" onClick={(e) => copyImageToClipboard()}>
                     <FaRegCopy color="white" />
@@ -92,8 +98,8 @@ export default function AnswerTable(props) {
     }
 
     return (
-        <div className="mt-5 flex">
-            <div className="mx-auto grid xl:grid-cols-3">
+        <div className="mt-5 mx-auto flex w-fit">
+            <div className="grid lg:grid-cols-2 xl:grid-cols-3">
                 {answers.map(a => {
                     return <AnswerCard
                         key={a.id}

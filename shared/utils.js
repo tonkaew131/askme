@@ -5,8 +5,11 @@ module.exports = {
         return false;
     },
     formatTimeAgo(date) {
+        if(date == undefined) {
+            return 'NaN'
+        }
+
         // https://blog.webdevsimplified.com/2020-07/relative-time-format/
-        
         const formatter = new Intl.RelativeTimeFormat('th', {
             numeric: 'auto'
         });

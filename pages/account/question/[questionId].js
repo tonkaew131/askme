@@ -18,7 +18,7 @@ import { IoMdReturnLeft } from 'react-icons/io';
 // Component
 function SearchMenu(props) {
     return (
-        <div className="text-black font-Prompt mx-4 mt-4">
+        <div className="text-black font-Prompt ml-4 mt-4">
             {/* Head */}
             <div className="flex w-11/12">
                 <Link href="/account/questions">
@@ -27,7 +27,7 @@ function SearchMenu(props) {
                     </div>
                 </Link>
 
-                <p className="text-3xl font-semibold break-all">{props.title}</p>
+                <p className="text-3xl font-semibold break-all">&quot;{props.title}&quot;</p>
             </div>
 
             {/* Body */}
@@ -48,7 +48,6 @@ function SearchMenu(props) {
                         </select>
                     </div>
                 </div>
-
             </div>
         </div>
     );
@@ -65,6 +64,8 @@ export default withPageAuthRequired(function Profile({ user }) {
     const [data, setData] = useState();
 
     useEffect(() => {
+        if (questionId == undefined) return;
+
         fetchAnswer().catch(error => console.error(error));
     }, [questionId]);
 
@@ -86,7 +87,7 @@ export default withPageAuthRequired(function Profile({ user }) {
     }
 
     if (loading) return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center min-h-screen w-screen">
             <LoadingSpinner className="scale-150 sm:scale-100" />
         </div>
     );
