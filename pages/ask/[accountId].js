@@ -3,9 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import Head from 'next/head';
 
+import LoadingSpinner from '../../components/LoadingSpinner';
+
 export default function AskMe() {
     const router = useRouter();
     const { accountId } = router.query;
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    const [responseError, setResponseError] = useState(false);
+    const [response, setResponse] = useState('');
 
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
@@ -14,11 +22,16 @@ export default function AskMe() {
         if (!accountId) return;
 
         const fetchData = async () => {
-            var data = await fetch(`/api/question/${accountId}`);
-            var json = await data.json();
+            const res = await fetch(`/api/question/${accountId}`);
+            const json = await res.json();
+            setLoading(false);
 
-            if (data.status == 200) {
+            if (res.status == 200) {
                 return setQuestion(json.data.title);
+            }
+
+            if ('error' in json) {
+                return setError(json.error.message);
             }
 
             console.log(json); // For Error
@@ -33,19 +46,41 @@ export default function AskMe() {
 
     function handleSendAnswer() {
         if (answer == '') {
+            setResponseError(true);
+            setResponse('Answet can\'t be emptied');
             return;
         }
 
         const sendData = async () => {
-            var data = await fetch(`/api/question/${accountId}?text=${answer}`, {
+            const res = await fetch(`/api/question/${accountId}?text=${answer}`, {
                 method: 'POST'
             });
-            var json = await data.json();
+            const json = await res.json();
+
+            if (res.status == 200) {
+                setResponseError(false);
+                setResponse('Added answer successfully!');
+                return;
+            }
+
+            if ('error' in json) {
+                setResponseError(true);
+                setResponse(json.error.message);
+                return;
+            }
             console.log(json); // For Error
         };
 
         sendData().catch(error => console.error(error));
     }
+
+    if (loading) return (
+        <div className="flex justify-center items-center h-screen">
+            <LoadingSpinner className="scale-150 sm:scale-100" />
+        </div>
+    );
+
+    if (error) return error;
 
     return (
         <div className="bg-slate-800 w-screen h-screen font-Prompt text-4xl flex justify-center">
@@ -65,6 +100,11 @@ export default function AskMe() {
                         <input className="px-2 w-full bg-transparent text-black focus:outline-none" onChange={(e) => handleAnswerChange(e.target.value)}></input>
                     </div>
                 </div>
+
+                {/* Resposne */}
+                {response && <p className={`font-mono text-center text-xl mt-5 ${responseError ? 'text-red-500' : 'text-green-500'}`}>
+                    {response}
+                </p>}
 
                 {/* Send Button */}
                 <div
