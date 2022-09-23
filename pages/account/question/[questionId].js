@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 // Main Component
 import Navbar from '../../../components/Navbar';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import BaseHead from '../../../components/BaseHead';
 
 // Pages Component
 import AnswerTable from '../../../components/account/question/Answer/AnswerTable';
@@ -96,9 +97,7 @@ export default withPageAuthRequired(function Profile({ user }) {
 
     return (
         <div className="bg-gray-100 w-screen min-h-screen h-full pb-5 text-black font-Prompt">
-            <Head>
-                <title>{data.title} | AskMe</title>
-            </Head>
+            <BaseHead title={`${data.title} | AskMe`} />
 
             <Navbar />
 

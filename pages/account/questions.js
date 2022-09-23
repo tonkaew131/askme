@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 // Main components
 import Navbar from '../../components/Navbar';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import BaseHead from '../../components/BaseHead';
 
 // Page components
 import AddNewQuestion from '../../components/account/question/AddNewQuestion';
@@ -158,9 +159,7 @@ export default withPageAuthRequired(function Profile({ user }) {
 
     return (
         <div className="bg-gray-100 w-screen min-h-screen h-full pb-5">
-            <Head>
-                <title>Manage Questions | AskMe</title>
-            </Head>
+            <BaseHead title="Manage Questions | AskMe" />
 
             <Navbar />
             <SearchMenu
