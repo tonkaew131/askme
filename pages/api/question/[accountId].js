@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../../shared/prisma';
 
-const prisma = new PrismaClient();
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
     const { accountId } = req.query;
 
-    await prisma.$connect();
     const user = await prisma.user.findFirst({
         where: {
             instagramId: accountId
@@ -14,7 +14,6 @@ export default async function handler(req, res) {
 
     // If user doesn't exist
     if (user == null) {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -25,7 +24,6 @@ export default async function handler(req, res) {
 
     // If user doesn't have primary question
     if (user.primaryQuestionId == '') {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -42,7 +40,6 @@ export default async function handler(req, res) {
 
     // Error in system???
     if (question == null) {
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -61,7 +58,6 @@ export default async function handler(req, res) {
             }
         })
 
-        prisma.$disconnect(); // No need to wait
         return res.status(404).json({
             error: {
                 code: 404,
@@ -71,9 +67,48 @@ export default async function handler(req, res) {
     }
 
     delete question['isDeleted']; // pointless, but cool
-    prisma.$disconnect(); // No need to wait
 
-    res.status(200).json({
-        data: question
+    // Get Question
+    if (req.method == 'GET') {
+        return res.status(200).json({
+            data: question
+        });
+    }
+
+    // Post Answer to Question
+    if (req.method == 'POST') {
+        // Header ip, and ua
+        console.log(req.headers['host']);
+        console.log(req.headers['user-agent']);
+
+        const { text } = req.query;
+        if (text == undefined) {
+            return res.status(400).json({
+                error: {
+                    code: 400,
+                    message: 'Bad Request, missing text'
+                }
+            });
+        }
+
+        await prisma.answer.create({
+            data: {
+                questionId: question.id,
+                text: text
+            }
+        });
+
+        return res.status(200).json({
+            data: {
+                message: 'Resource updated successfully'
+            }
+        });
+    }
+
+    return res.status(405).json({
+        error: {
+            code: 405,
+            message: 'Method Not Allowed'
+        }
     });
 }
