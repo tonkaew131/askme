@@ -1,15 +1,16 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-// import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 // const prisma = new PrismaClient();
 
 export default withApiAuthRequired(async function handler(req, res) {
     const { user } = getSession(req, res);
-    // await prisma.$connect();
+    //await prisma.$connect();
     // const User = await prisma.user.create({
     //     data: {
-    //         email: 'nongtonkaew@gmail.com',
-    //         instagramId: 'tonkaew131'
+    //         email: 'mokmaard646@gmail.com',
+    //         instagramId: 'maardmok',
+    //         primaryQuestionId: ''
     //     }
     // })
 
