@@ -78,8 +78,8 @@ export default async function handler(req, res) {
     // Post Answer to Question
     if (req.method == 'POST') {
         // Header ip, and ua
-        console.log(req.headers['host']);
-        console.log(req.headers['user-agent']);
+        // console.log(req.headers['host']);
+        // console.log(req.headers['user-agent']);
 
         const { text } = req.query;
         if (text == undefined) {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/router'
-import Head from 'next/head';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import BaseHead from '../../components/BaseHead';

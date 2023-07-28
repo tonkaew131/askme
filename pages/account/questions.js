@@ -1,7 +1,6 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { formatTimeAgo } from '../../shared/utils';
 
-import Head from 'next/head';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 

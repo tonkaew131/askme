@@ -1,7 +1,6 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 import Link from 'next/link';
-import Head from 'next/head';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 
